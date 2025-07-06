@@ -2,7 +2,7 @@ package com.eazybytes.transactions.dtos;
 
 import java.math.BigDecimal;
 
-public record DepositTransactionRequestDTO(
+public record TransferTransactionRequestDTO(
     BigDecimal amount,
     String receiverEmail
 ) {
