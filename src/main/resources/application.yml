@@ -15,7 +15,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          secret: "SECRET_KEY"
+          secret: "U8dN6z2kFf3LwXq1T7vGj9hYbCeLmZaQ"
   application:
     name: service-transactions
   cloud:
