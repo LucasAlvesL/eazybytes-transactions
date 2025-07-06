@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@FeignClient(name = "service-users", url = "${service.users.url}")
+@FeignClient(name = "service-users")
 public interface UserClient {
 
     @PostMapping("/customers/deposit")
