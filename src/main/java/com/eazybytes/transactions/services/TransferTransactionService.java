@@ -5,6 +5,7 @@ import com.eazybytes.transactions.entities.TransactionEntity;
 import com.eazybytes.transactions.entities.TransactionStatus;
 import com.eazybytes.transactions.entities.TransactionType;
 import com.eazybytes.transactions.repositories.TransactionRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -14,22 +15,21 @@ import java.util.UUID;
 public class TransferTransactionService {
 
     private final TransactionRepository repository;
+    private final CustomerValidatorService customerValidatorService;
 
 
-    public TransferTransactionService(TransactionRepository repository) {
+    public TransferTransactionService(TransactionRepository repository, CustomerValidatorService customerValidatorService) {
         this.repository = repository;
+        this.customerValidatorService = customerValidatorService;
     }
 
     @Transactional
     public TransactionEntity transfer(UUID customerId, TransferTransactionRequestDTO dto) {
-        var customer = this.repository.findById(customerId)
-                .orElseThrow(() -> new IllegalArgumentException("Customer not found"));
-        var receiver = repository.findByReceiverEmail(dto.receiverEmail()
-                .describeConstable().orElseThrow(() -> new IllegalArgumentException("Receiver not found")));
+        customerValidatorService.isValidCustomer(customerId);
 
         // Make transaction
         var transaction = new TransactionEntity();
-        transaction.setCustomerId(customer.getCustomerId());
+        transaction.setCustomerId(customerId);
         transaction.setAmount(dto.amount());
         transaction.setReceiverEmail(dto.receiverEmail());
         transaction.setType(TransactionType.TRANSFER);
